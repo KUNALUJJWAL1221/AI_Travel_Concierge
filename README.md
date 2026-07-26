@@ -1,61 +1,171 @@
 # 🌍 AI Travel Concierge
 
-An intelligent **Retrieval-Augmented Generation (RAG)** application that allows users to upload travel guides (PDF or DOCX) and ask questions about their contents using **Google Gemini**, **LangChain**, and **FAISS**.
+An intelligent **AI-powered Travel Assistant** built with **LangGraph, LangChain, Google Gemini, FAISS, and Streamlit**.
 
-Instead of searching the internet, the assistant answers **only from the uploaded document**, making it useful for personalized travel guides, brochures, itineraries, and tourism documents.
-
----
-
-## 🚀 Features
-
-- 📄 Upload PDF or DOCX travel guides
-- 🔍 Automatic document parsing and chunking
-- 🧠 Semantic search using Google Gemini Embeddings
-- ⚡ Fast retrieval with FAISS Vector Store
-- 💬 Natural language Q&A powered by Gemini
-- 📚 Answers are generated only from the uploaded document
-- 🖥️ Clean Streamlit interface
-- 💾 Chat history during the session
+The application allows users to upload travel guides (PDF/DOCX), ask questions about the uploaded document, search the web for the latest travel information, and retrieve real-time weather updates—all through a single conversational interface.
 
 ---
 
-## 🛠 Tech Stack
+## 🚀 Project Overview
 
-| Technology | Purpose |
-|------------|---------|
-| Python | Backend |
-| Streamlit | User Interface |
-| LangChain | RAG Pipeline |
-| Google Gemini | LLM |
-| Gemini Embeddings | Vector Embeddings |
-| FAISS | Vector Database |
-| PyPDFLoader | PDF Parsing |
-| Docx2txtLoader | DOCX Parsing |
+AI Travel Concierge is a Retrieval-Augmented Generation (RAG) application that combines:
+
+- 📄 Document Question Answering
+- 🌐 Live Web Search
+- 🌦 Real-Time Weather Information
+- 🤖 Tool Calling using LangGraph
+- 💬 Conversational Chat Interface
+
+Instead of relying only on an LLM's internal knowledge, the assistant intelligently decides whether to answer from:
+
+- the uploaded travel guide,
+- the internet,
+- or the WeatherStack API.
 
 ---
 
-## 📂 Project Structure
+# ✨ Features
+
+### 📄 Document Intelligence
+- Upload PDF travel guides
+- Upload DOCX travel guides
+- Automatic text extraction
+- Intelligent chunking
+- Vector embeddings
+- Semantic document search
+- Context-aware question answering
+
+---
+
+### 🤖 AI Agent
+
+- Google Gemini 2.5 Flash
+- LangGraph Agent
+- Automatic Tool Calling
+- Multi-tool reasoning
+- Natural language conversations
+
+---
+
+### 🔍 Search Tools
+
+#### 📄 Document Search
+Answers questions using only the uploaded travel guide.
+
+Examples:
+
+- Compare Goa and Kerala
+- Best time to visit Kerala
+- Beaches in Goa
+- Famous places in Jaipur
+
+---
+
+#### 🌐 Web Search
+
+Uses DuckDuckGo Search for recent information.
+
+Examples:
+
+- Latest tourist attractions in Jaipur
+- Top restaurants in Delhi
+- Recent travel news
+
+---
+
+#### 🌦 Weather Search
+
+Uses WeatherStack API.
+
+Examples:
+
+- Weather in Delhi
+- Weather in Mumbai
+- Weather in Goa
+
+---
+
+### 💻 User Interface
+
+- Streamlit Chat Interface
+- Chat History
+- File Upload
+- Responsive Layout
+- Sidebar Controls
+- Loading Indicators
+
+---
+
+# 🏗 Project Architecture
+
+```
+                    User
+                      │
+                      ▼
+               Streamlit UI
+                      │
+                      ▼
+               LangGraph Agent
+                      │
+          ┌───────────┼───────────┐
+          │           │           │
+          ▼           ▼           ▼
+   Document Tool   Web Search   Weather Tool
+          │            │             │
+          ▼            ▼             ▼
+      FAISS RAG    DuckDuckGo   WeatherStack
+          │
+          ▼
+   Gemini Embeddings
+          │
+          ▼
+ Google Gemini 2.5 Flash
+```
+
+---
+
+# 🛠 Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Language | Python 3 |
+| Framework | Streamlit |
+| Agent Framework | LangGraph |
+| LLM Framework | LangChain |
+| LLM | Google Gemini 2.5 Flash |
+| Embeddings | Gemini Embedding-001 |
+| Vector Database | FAISS |
+| Web Search | DuckDuckGo |
+| Weather API | WeatherStack |
+| Document Parsing | PyPDF, Docx2txt |
+
+---
+
+# 📂 Project Structure
 
 ```
 AI_Travel_Concierge/
+
 │
-├── assets/
-├── data/
-├── utils/
+├── app.py                 # Streamlit application
+├── graph.py               # LangGraph workflow
+├── agent.py               # Agent interface
+├── rag.py                 # RAG pipeline
+├── tools.py               # Tool definitions
+├── config.py              # Configuration
 │
-├── app.py              # Streamlit application
-├── rag.py              # RAG pipeline
-├── config.py           # Configuration
 ├── requirements.txt
 ├── README.md
-└── .env
+├── .env
+│
+└── Travel Guides/
 ```
 
 ---
 
-## ⚙️ Installation
+# ⚙ Installation
 
-### 1. Clone the repository
+Clone the repository
 
 ```bash
 git clone https://github.com/yourusername/AI_Travel_Concierge.git
@@ -63,29 +173,27 @@ git clone https://github.com/yourusername/AI_Travel_Concierge.git
 cd AI_Travel_Concierge
 ```
 
----
-
-### 2. Create Virtual Environment
-
-Windows
+Create virtual environment
 
 ```bash
 python -m venv .venv
+```
 
+Activate
+
+### Windows
+
+```bash
 .venv\Scripts\activate
 ```
 
-Linux / macOS
+### Linux / Mac
 
 ```bash
-python3 -m venv .venv
-
 source .venv/bin/activate
 ```
 
----
-
-### 3. Install Dependencies
+Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -93,141 +201,212 @@ pip install -r requirements.txt
 
 ---
 
-### 4. Create a `.env` File
+# 🔑 Environment Variables
+
+Create a `.env` file.
 
 ```env
-GOOGLE_API_KEY=YOUR_GEMINI_API_KEY
+GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
+
+WEATHERSTACK_API_KEY=YOUR_WEATHERSTACK_API_KEY
 ```
-
-You can obtain a Gemini API key from:
-
-https://aistudio.google.com/app/apikey
 
 ---
 
-## ▶️ Run the Application
+# ▶ Running the Project
+
+Start Streamlit
 
 ```bash
 streamlit run app.py
 ```
 
-The application will be available at:
-
-```
-http://localhost:8501
-```
-
 ---
 
-## 📖 How It Works
+# 🧠 How It Works
 
-### Step 1
+## Step 1
 
-Upload a travel guide in PDF or DOCX format.
+User uploads a travel guide.
 
 ↓
 
-### Step 2
+## Step 2
 
-The document is:
-
-- Loaded
-- Split into smaller chunks
-- Converted into embeddings
-- Stored inside FAISS
+The document is loaded.
 
 ↓
 
-### Step 3
+## Step 3
 
-When a user asks a question:
+The document is split into chunks.
 
-- Relevant chunks are retrieved
-- Context is sent to Gemini
-- Gemini generates an answer only from the retrieved content
+↓
+
+## Step 4
+
+Gemini Embeddings generate vector representations.
+
+↓
+
+## Step 5
+
+FAISS stores the vectors.
+
+↓
+
+## Step 6
+
+The LangGraph Agent receives the user's question.
+
+↓
+
+## Step 7
+
+The agent automatically decides which tool to use.
+
+Possible tools:
+
+- 📄 Document Search
+- 🌐 Web Search
+- 🌦 Weather Tool
+
+↓
+
+## Step 8
+
+The tool returns information.
+
+↓
+
+## Step 9
+
+Gemini generates the final response.
 
 ---
 
-## 🧠 RAG Pipeline
+# 💬 Example Questions
 
-```
-User Upload
-      │
-      ▼
-Document Loader
-      │
-      ▼
-Text Splitter
-      │
-      ▼
-Gemini Embeddings
-      │
-      ▼
-FAISS Vector Store
-      │
-      ▼
-Retriever
-      │
-      ▼
-Gemini LLM
-      │
-      ▼
-Answer
-```
-
----
-
-## 📸 Demo
-
-Example questions:
+### Document Search
 
 ```
 Compare Goa and Kerala.
+```
 
-What are the best foods to try in Delhi?
+```
+Best time to visit Kerala.
+```
 
-Which destinations are suitable for adventure sports?
-
-What is the best time to visit Rajasthan?
-
-How many days are recommended for Kerala?
+```
+Tell me about Jaipur.
 ```
 
 ---
 
-## 📌 Example Output
+### Weather
 
-**Question**
+```
+Weather in Delhi
+```
 
-> Compare Goa and Kerala.
+```
+Weather in Goa
+```
 
-**Answer**
-
-> Goa offers relaxing beaches, Portuguese architecture, seafood, and water sports, while Kerala is known for its backwaters, tea plantations, wildlife sanctuaries, and houseboat experiences.
-
----
-
-## 🔒 Limitations
-
-- Supports only PDF and DOCX files.
-- Answers are limited to the uploaded document.
-- No internet search.
-- Chat history resets after restarting the application.
+```
+Weather in Mumbai
+```
 
 ---
 
-## 🔮 Future Improvements
+### Web Search
 
-- Multiple document support
-- Persistent vector database
-- Conversation memory
-- Source citations
-- Hybrid Search
-- Voice interaction
-- Image understanding
-- Multi-language support
-- Travel itinerary generation
-- Hotel and flight search integration
+```
+Latest tourist attractions in Jaipur
+```
+
+```
+Top restaurants in Goa
+```
+
+```
+Travel news in India
+```
+
+---
+
+# 📦 Week-wise Progress
+
+## ✅ Week 1–2
+
+- Project Setup
+- Streamlit UI
+- Google Gemini Integration
+- RAG Pipeline
+- FAISS Vector Store
+- PDF Support
+- DOCX Support
+- Semantic Search
+- Travel Guide Chat
+
+---
+
+## ✅ Week 3–4
+
+- LangGraph Integration
+- AI Agent
+- Tool Calling
+- Document Search Tool
+- DuckDuckGo Search Tool
+- WeatherStack Tool
+- Automatic Tool Routing
+- Tool Testing Scripts
+- Error Handling Improvements
+
+---
+
+# 📈 Future Improvements
+
+- Conversation Memory
+- Persistent FAISS Database
+- Hotel Booking APIs
+- Flight Booking APIs
+- Google Maps Integration
+- Voice Assistant
+- Image-based Travel Search
+- Authentication
+- Deployment on Streamlit Cloud
+- Docker Support
+
+---
+
+# 📷 Screenshots
+
+Add screenshots of:
+
+- Home Screen
+- Uploading Document
+- Document Search
+- Web Search
+- Weather Search
+
+---
+
+# 🤝 Acknowledgements
+
+- Google Gemini
+- LangChain
+- LangGraph
+- Streamlit
+- FAISS
+- DuckDuckGo
+- WeatherStack
+
+---
+
+# 📄 License
+
+This project is developed for educational purposes as part of an AI Engineering learning program.
 
 ---
 
@@ -235,16 +414,4 @@ How many days are recommended for Kerala?
 
 **Kunal Ujjwal**
 
-AI Travel Concierge is a learning project demonstrating Retrieval-Augmented Generation (RAG) using Google's Gemini models with LangChain and FAISS.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-Feel free to use, modify, and improve it for educational or personal projects.
-
----
-
-⭐ If you found this project useful, consider giving it a star on GitHub!
+Built with ❤️ using Python, LangGraph, Google Gemini, and Streamlit.
