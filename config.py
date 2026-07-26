@@ -11,6 +11,13 @@ if not GOOGLE_API_KEY:
         "GOOGLE_API_KEY not found. Please add it to your .env file."
     )
 
+WEATHERSTACK_API_KEY = os.getenv("WEATHERSTACK_API_KEY")
+
+if not WEATHERSTACK_API_KEY:
+    raise ValueError(
+        "WEATHERSTACK_API_KEY not found in .env"
+    )
+
 # Default models
 CHAT_MODEL = "gemini-2.5-flash"
 EMBEDDING_MODEL = "models/gemini-embedding-001"
