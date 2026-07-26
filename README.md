@@ -8,6 +8,11 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![License](https://img.shields.io/badge/License-Educational-success?style=for-the-badge)
 
+![GitHub stars](https://img.shields.io/github/stars/KUNALUJJWAL1221/AI_Travel_Concierge?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/KUNALUJJWAL1221/AI_Travel_Concierge?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/KUNALUJJWAL1221/AI_Travel_Concierge?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/KUNALUJJWAL1221/AI_Travel_Concierge?style=for-the-badge)
+
 An intelligent **AI-powered Travel Assistant** built with **LangGraph, LangChain, Google Gemini, FAISS, and Streamlit**.
 
 The application allows users to upload travel guides (PDF/DOCX), ask questions about the uploaded document, search the web for the latest travel information, and retrieve real-time weather updates—all through a single conversational interface.
