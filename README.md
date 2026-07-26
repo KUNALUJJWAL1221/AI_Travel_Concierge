@@ -1,5 +1,13 @@
 # 🌍 AI Travel Concierge
 
+![Python](https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge&logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-Agent_Framework-00A67E?style=for-the-badge)
+![LangChain](https://img.shields.io/badge/LangChain-Framework-1C3C3C?style=for-the-badge)
+![Google Gemini](https://img.shields.io/badge/Google-Gemini_2.5_Flash-4285F4?style=for-the-badge&logo=google)
+![FAISS](https://img.shields.io/badge/FAISS-Vector_Database-orange?style=for-the-badge)
+![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![License](https://img.shields.io/badge/License-Educational-success?style=for-the-badge)
+
 An intelligent **AI-powered Travel Assistant** built with **LangGraph, LangChain, Google Gemini, FAISS, and Streamlit**.
 
 The application allows users to upload travel guides (PDF/DOCX), ask questions about the uploaded document, search the web for the latest travel information, and retrieve real-time weather updates—all through a single conversational interface.
