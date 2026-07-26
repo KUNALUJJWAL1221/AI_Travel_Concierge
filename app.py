@@ -6,9 +6,10 @@ import streamlit as st
 from rag import (
     build_vector_store,
     get_retriever,
-    ask_question,
 )
 
+from tools import set_retriever
+from agent import ask_agent
 # ----------------------------------
 # Page Configuration
 # ----------------------------------
@@ -43,7 +44,7 @@ Ask questions about your uploaded travel guide.
 - PDF
 - DOCX
 
-Powered by **Gemini + LangChain + FAISS**
+Powered by **Gemini + LangGraph + FAISS + DuckDuckGo + WeatherStack**
 """
 )
 
@@ -73,7 +74,11 @@ with st.sidebar:
         with st.spinner("Building Vector Database..."):
 
             vectorstore = build_vector_store(temp_path)
-            st.session_state.retriever = get_retriever(vectorstore)
+            retriever = get_retriever(vectorstore)
+            st.session_state.retriever = retriever
+
+            # Make the retriever available to LangGraph
+            set_retriever(retriever)
 
         st.success("✅ Travel guide processed successfully!")
 
@@ -114,10 +119,7 @@ if prompt:
 
         with st.spinner("Thinking..."):
 
-            answer = ask_question(
-                st.session_state.retriever,
-                prompt,
-            )
+            answer = ask_agent(prompt)
 
         st.markdown(answer)
 
