@@ -3,7 +3,7 @@ import requests
 from langchain.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
 
-from config import WEATHERSTACK_API_KEY
+from config import WEATHERSTACK_API_KEY, SERPAPI_API_KEY
 from rag import ask_question
 
 # -----------------------------------
@@ -75,14 +75,24 @@ def get_weather(city: str) -> str:
         "query": city,
     }
 
-    response = requests.get(
-        url,
-        params=params,
-        timeout=20,
-    )
+    try:
+
+        response = requests.get(
+            url,
+            params=params,
+            timeout=20,
+        )
+
+        data = response.json()
+
+    except requests.exceptions.RequestException:
+
+        return "Unable to connect to the weather service."
+
+    if "current" not in data:
+        return "Weather information not found."
 
     data = response.json()
-    print(data)
 
     if "current" not in data:
         return "Weather information not found."
@@ -99,4 +109,125 @@ def get_weather(city: str) -> str:
         f"Weather: {current['weather_descriptions'][0]}\n"
         f"Humidity: {current['humidity']}%\n"
         f"Wind Speed: {current['wind_speed']} km/h"
+    )
+
+# -----------------------------------
+# SerpApi Google Flights Tool
+# -----------------------------------
+
+@tool
+def flight_search(
+    departure_id: str,
+    arrival_id: str,
+    outbound_date: str,
+) -> str:
+    """
+    Search Google Flights for available flights.
+
+    Use this tool when the user asks about:
+    - flights
+    - airfare
+    - flight prices
+    - available flights
+    - flying between two airports or cities
+
+    departure_id:
+        IATA airport code for the departure airport.
+        Example: DEL
+
+    arrival_id:
+        IATA airport code for the arrival airport.
+        Example: GOI
+
+    outbound_date:
+        Departure date in YYYY-MM-DD format.
+        Example: 2026-08-20
+    """
+
+    url = "https://serpapi.com/search.json"
+
+    params = {
+        "engine": "google_flights",
+        "api_key": SERPAPI_API_KEY,
+        "hl": "en",
+        "gl": "in",
+        "type": "2",
+        "departure_id": departure_id.upper(),
+        "arrival_id": arrival_id.upper(),
+        "outbound_date": outbound_date,
+        "currency": "INR",
+    }
+
+    try:
+        response = requests.get(
+            url,
+            params=params,
+            timeout=20,
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+    except requests.exceptions.RequestException:
+        return "Unable to connect to the flight search service."
+
+    if "error" in data:
+        return f"Flight search error: {data['error']}"
+
+    best_flights = data.get("best_flights", [])
+
+    if not best_flights:
+        return (
+            f"No flights were found from {departure_id.upper()} "
+            f"to {arrival_id.upper()} on {outbound_date}."
+        )
+
+    results = []
+
+    for flight_option in best_flights[:5]:
+
+        flights = flight_option.get("flights", [])
+
+        if not flights:
+            continue
+
+        first_flight = flights[0]
+
+        departure = first_flight.get("departure_airport", {})
+        arrival = first_flight.get("arrival_airport", {})
+
+        airline = first_flight.get("airline", "Unknown airline")
+        flight_number = first_flight.get(
+            "flight_number",
+            "Unknown flight"
+        )
+
+        departure_time = departure.get("time", "Unknown")
+        arrival_time = arrival.get("time", "Unknown")
+
+        duration = flight_option.get(
+            "total_duration",
+            first_flight.get("duration", "Unknown")
+        )
+
+        price = flight_option.get("price")
+
+        if price is not None:
+            price_text = f"₹{price:,}"
+        else:
+            price_text = "Price unavailable"
+
+        results.append(
+            f"- {airline} {flight_number}: "
+            f"{departure_time} → {arrival_time}, "
+            f"{duration} minutes, {price_text}"
+        )
+
+    if not results:
+        return "Flight information was found, but no usable flight results were available."
+
+    return (
+        f"Flights from {departure_id.upper()} to {arrival_id.upper()} "
+        f"on {outbound_date}:\n"
+        + "\n".join(results)
     )
