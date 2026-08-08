@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env
-load_dotenv()
+load_dotenv(override=True)
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
@@ -18,8 +18,14 @@ if not WEATHERSTACK_API_KEY:
         "WEATHERSTACK_API_KEY not found in .env"
     )
 
+SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
+if not SERPAPI_API_KEY:
+    raise ValueError(
+        "SERPAPI_API_KEY not found in .env"
+    )
+
 # Default models
-CHAT_MODEL = "gemini-2.5-flash"
+CHAT_MODEL = "models/gemini-2.5-flash"
 EMBEDDING_MODEL = "models/gemini-embedding-001"
 
 # Text splitting configuration
