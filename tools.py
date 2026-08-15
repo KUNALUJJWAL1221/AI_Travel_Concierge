@@ -231,3 +231,76 @@ def flight_search(
         f"on {outbound_date}:\n"
         + "\n".join(results)
     )
+
+# -----------------------------------
+# Basic Itinerary Generation Tool
+# -----------------------------------
+
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+from config import GOOGLE_API_KEY, CHAT_MODEL
+
+
+itinerary_llm = ChatGoogleGenerativeAI(
+    model=CHAT_MODEL,
+    google_api_key=GOOGLE_API_KEY,
+    temperature=0.4,
+)
+
+
+@tool
+def generate_itinerary(
+    destination: str,
+    days: int,
+) -> str:
+    """
+    Generate a basic day-by-day travel itinerary.
+
+    IMPORTANT:
+    Call this tool whenever the user asks for an itinerary,
+    trip plan, travel plan, or day-by-day plan.
+
+    Examples:
+    - Create a 3-day itinerary for Goa.
+    - Plan a 5-day trip to Kerala.
+    - Make a 2-day itinerary for Jaipur.
+
+    destination:
+        The travel destination.
+
+    days:
+        Number of days for the trip.
+    """
+
+    if days < 1 or days > 14:
+        return "Please choose a trip duration between 1 and 14 days."
+
+    prompt = f"""
+Create a practical {days}-day travel itinerary for {destination}.
+
+Requirements:
+
+- Organize the itinerary day by day.
+- Include morning, afternoon, and evening activities.
+- Include major attractions and experiences.
+- Keep the plan realistic and not overcrowded.
+- Include reasonable travel flow between nearby attractions.
+- Include a short practical tip for each day.
+- Use Markdown formatting.
+- Do not invent specific hotel prices, flight prices, or exact opening
+  hours.
+- Keep the itinerary suitable for a general traveler.
+
+Destination: {destination}
+Trip duration: {days} days
+"""
+
+    try:
+
+        response = itinerary_llm.invoke(prompt)
+
+        return response.content
+
+    except Exception:
+
+        return "Unable to generate the itinerary right now."   
