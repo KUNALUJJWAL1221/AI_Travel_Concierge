@@ -10,6 +10,12 @@ from rag import (
 
 from tools import set_retriever
 from agent import ask_agent
+
+from database import (
+    initialize_database,
+    save_search,
+)
+
 # ----------------------------------
 # Page Configuration
 # ----------------------------------
@@ -148,6 +154,13 @@ if "retriever" not in st.session_state:
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
+# ----------------------------------
+# SQLite Database
+# ----------------------------------
+
+initialize_database()
+
 
 # ----------------------------------
 # Header
@@ -307,6 +320,12 @@ if prompt:
     with st.spinner("🤖 Thinking..."):
 
         answer = ask_agent(prompt)
+
+    # Save the search to SQLite
+    save_search(
+        prompt,
+        answer,
+    )
 
     st.session_state.chat_history.append(
         {
