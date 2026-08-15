@@ -17,6 +17,7 @@ from tools import (
     web_search,
     get_weather,
     flight_search,
+    generate_itinerary,
 )
 
 
@@ -40,6 +41,7 @@ tools = [
     web_search,
     get_weather,
     flight_search,
+    generate_itinerary,
 ]
 
 
@@ -61,7 +63,7 @@ class AgentState(TypedDict):
 SYSTEM_PROMPT = """
 You are an AI Travel Concierge.
 
-You have access to four tools:
+You have access to five tools:
 
 1. document_search
     - ALWAYS use this tool if the user asks about destinations,
@@ -85,8 +87,30 @@ You have access to four tools:
     - Use IATA airport codes for departure_id and arrival_id.
     - Use YYYY-MM-DD format for outbound_date.
 
-Rules:
+5. generate_itinerary
+    - This tool is specifically responsible for generating travel itineraries.
+    - ALWAYS call this tool when the user asks to create, generate, make,
+      or plan an itinerary or trip plan.
+    - Do NOT ask the user to confirm an itinerary request if the destination
+      and number of days are already provided.
+    - Extract the destination and number of days directly from the user's
+      request.
+    - Pass the destination to the "destination" argument.
+    - Pass the number of days to the "days" argument.
 
+    Examples:
+
+    User: "Create a 3-day itinerary for Goa."
+    → Call generate_itinerary(destination="Goa", days=3)
+
+    User: "Plan a 5-day trip to Kerala."
+    → Call generate_itinerary(destination="Kerala", days=5)
+
+    User: "Make a 2-day itinerary for Jaipur."
+    → Call generate_itinerary(destination="Jaipur", days=2)
+
+
+Rules:
 - Never invent information about the uploaded travel guide.
 - If document_search cannot find the answer,
   politely say that the guide doesn't contain that information.
@@ -95,6 +119,10 @@ Rules:
 - Use flight_search for live flight information instead of guessing
   flight schedules or prices.
 - Keep answers clear and well formatted using Markdown.
+- Use generate_itinerary for itinerary-generation requests instead of
+  creating the itinerary directly from your own response.
+- For itinerary requests, use generate_itinerary instead of answering
+  directly from the LLM's own response.
 """
 
 # ----------------------------------
