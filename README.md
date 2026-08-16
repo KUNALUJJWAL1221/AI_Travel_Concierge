@@ -15,55 +15,66 @@
 
 An intelligent **AI-powered Travel Assistant** built with **LangGraph, LangChain, Google Gemini, FAISS, and Streamlit**.
 
-The application allows users to upload travel guides (PDF/DOCX), ask questions about the uploaded document, search the web for the latest travel information, and retrieve real-time weather updates—all through a single conversational interface.
-
+The application provides a conversational travel assistant that can understand uploaded travel guides, search the web, retrieve real-time weather information, search flights, generate basic travel itineraries, and save user searches locally using SQLite.
 ---
 
 ## 🚀 Project Overview
 
-AI Travel Concierge is a Retrieval-Augmented Generation (RAG) application that combines:
+**AI Travel Concierge** is a Retrieval-Augmented Generation (RAG) application combined with a LangGraph-based AI agent.
 
-- 📄 Document Question Answering
-- 🌐 Live Web Search
-- 🌦 Real-Time Weather Information
-- 🤖 Tool Calling using LangGraph
-- 💬 Conversational Chat Interface
+The system intelligently routes user requests to the appropriate tool instead of relying only on the LLM's internal knowledge.
 
-Instead of relying only on an LLM's internal knowledge, the assistant intelligently decides whether to answer from:
+Depending on the user's request, the assistant can use:
 
-- the uploaded travel guide,
-- the internet,
-- or the WeatherStack API.
+- 📄 Uploaded travel guides
+- 🌐 Web search
+- 🌦 WeatherStack API
+- ✈️ Google Flights through SerpApi
+- 🗺️ Basic itinerary generation
+- 💾 SQLite search history
+
+The project is designed as an evolving AI Engineering project, with new capabilities being added incrementally.
 
 ---
 
 # ✨ Features
 
-### 📄 Document Intelligence
+## 📄 Document Intelligence
+
 - Upload PDF travel guides
 - Upload DOCX travel guides
 - Automatic text extraction
-- Intelligent chunking
-- Vector embeddings
-- Semantic document search
+- Intelligent document chunking
+- Gemini embeddings
+- FAISS vector search
+- Semantic document retrieval
 - Context-aware question answering
 
 ---
 
 ### 🤖 AI Agent
+The application uses Google Gemini 2.5 Flash with LangGraph for intelligent tool routing.
 
-- Google Gemini 2.5 Flash
-- LangGraph Agent
-- Automatic Tool Calling
-- Multi-tool reasoning
-- Natural language conversations
+Features include:
+
+-Gemini-powered conversations
+-LangGraph agent workflow
+-Automatic tool calling
+-Multiple specialized tools
+-Natural-language travel requests
+-Markdown-formatted responses
+-Tool-based reasoning
+
+The agent decides which tool should handle a request based on the user's question.
 
 ---
 
 ### 🔍 Search Tools
 
 #### 📄 Document Search
-Answers questions using only the uploaded travel guide.
+Searches the uploaded travel guide using the FAISS-based RAG pipeline.
+
+The agent prioritizes the uploaded document whenever the requested information may exist inside the guide.
 
 Examples:
 
@@ -76,81 +87,241 @@ Examples:
 
 #### 🌐 Web Search
 
-Uses DuckDuckGo Search for recent information.
+Uses DuckDuckGo Search to retrieve recent or external information.
 
-Examples:
+Useful for:
 
-- Latest tourist attractions in Jaipur
-- Top restaurants in Delhi
-- Recent travel news
+-Recent travel information
+-Current attractions
+-Travel news
+-Information not available in the uploaded guide
+
+Example:
+
+-What are the latest tourist attractions in Jaipur?
 
 ---
 
 #### 🌦 Weather Search
 
-Uses WeatherStack API.
+Uses the WeatherStack API for current weather information.
+
+Example:
+
+-Weather in Goa
+
+Returns information such as:
+
+-Temperature
+-Weather description
+-Humidity
+-Wind speed
+
+---
+
+#### ✈️ Flight Search
+
+Uses SerpApi Google Flights to search for available flights.
+
+The flight tool supports:
+
+-Departure airport
+-Arrival airport
+-Outbound date
+-Airline
+-Flight number
+-Departure time
+-Arrival time
+-Flight duration
+-Approximate fare
+
+Example:
+
+-Find flights from Delhi to Goa on 2026-08-20.
+
+The agent uses IATA airport codes when calling the flight search tool.
+
+---
+
+#### 🗺️ Basic Itinerary Generation
+
+The project now supports automatic generation of basic day-by-day travel itineraries.
+
+The user can request an itinerary using natural language.
 
 Examples:
+-Create a 3-day itinerary for Goa.
+-Make a 2-day itinerary for Jaipur.
+-Plan a 5-day trip to Kerala.
 
-- Weather in Delhi
-- Weather in Mumbai
-- Weather in Goa
+The itinerary generator creates:
+
+-Daily travel plans
+-Morning activities
+-Afternoon activities
+-Evening activities
+-Major attractions
+-Travel flow between nearby locations
+-Practical tips
+
+The itinerary generator is intentionally kept as a basic planning feature at this stage. More advanced personalization and real-time itinerary optimization can be added in future iterations.
+
+---
+
+#### 💾 SQLite Search History
+The application now includes a lightweight SQLite database for storing search interactions.
+
+Saved information includes:
+
+-User question
+-Assistant response
+-Timestamp
+
+This provides persistent local storage for searches instead of keeping everything only in Streamlit session state.
+
+Example database record:
+
+```
+ID | Question                    | Response                  | Created At
+---|-----------------------------|---------------------------|---------------------
+1  | Tell me about Goa.          | Goa is renowned for...    | 2026-08-13T18:32:09
+2  | Best beaches in Goa?        | Information not found... | 2026-08-13T18:33:06
+```
+
+The database can also be tested independently using the database test script.
+
+---
+
+#### 🔐 Secure API Key Handling
+
+API keys are handled through environment variables rather than being hard-coded into the application.
+
+The project uses a .env file for local development.
+
+Required API keys include:
+```
+GOOGLE_API_KEY=your_google_api_key_here
+WEATHERSTACK_API_KEY=your_weatherstack_api_key_here
+SERPAPI_API_KEY=your_serpapi_api_key_here
+```
 
 ---
 
 ### 💻 User Interface
 
-- Streamlit Chat Interface
-- Chat History
-- File Upload
-- Responsive Layout
-- Sidebar Controls
-- Loading Indicators
+The application uses Streamlit to provide a conversational travel interface.
 
+Current UI features include:
+
+- 🌍 Travel assistant dashboard
+- 💬 Conversational chat
+- 📂 PDF/DOCX upload
+- 💭 Chat history during the session
+- 📋 Sidebar controls
+- ⏳ Loading indicators
+📄 Document processing feedback
+🎨 Custom chat message styling
+
+The UI will be further improved and polished during the upcoming development phase.
 ---
 
 # 🏗 Project Architecture
 
 ```
-                    User
-                      │
-                      ▼
-               Streamlit UI
-                      │
-                      ▼
-               LangGraph Agent
-                      │
-          ┌───────────┼───────────┐
-          │           │           │
-          ▼           ▼           ▼
-   Document Tool   Web Search   Weather Tool
-          │            │             │
-          ▼            ▼             ▼
-      FAISS RAG    DuckDuckGo   WeatherStack
+                         User
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │ Streamlit UI│
+                    └──────┬──────┘
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │ LangGraph   │
+                    │ AI Agent    │
+                    └──────┬──────┘
+                           │
+          ┌────────────────┼─────────────────┐
+          │                │                 │
+          ▼                ▼                 ▼
+   Document Search     Web Search       Weather Tool
+          │                │                 │
+          ▼                ▼                 ▼
+       FAISS          DuckDuckGo        WeatherStack
+       RAG
           │
-          ▼
-   Gemini Embeddings
           │
-          ▼
- Google Gemini 2.5 Flash
+          ├───────────────┐
+          │               │
+          ▼               ▼
+   Flight Search    Itinerary Generator
+          │               │
+          ▼               ▼
+       SerpApi        Gemini LLM
+          │
+          │
+          └───────────────┐
+                          ▼
+                    Final Response
+                          │
+                          ▼
+                    SQLite Database
+                    Search History
+```
+
+---
+### 🧠 RAG Architecture
+
+The document-question-answering pipeline works as follows:
+
+```
+Travel Guide
+     │
+     ▼
+Document Loader
+     │
+     ▼
+Text Splitting
+     │
+     ▼
+Gemini Embeddings
+     │
+     ▼
+FAISS Vector Store
+     │
+     ▼
+Retriever
+     │
+     ▼
+Relevant Context
+     │
+     ▼
+Gemini
+     │
+     ▼
+Answer
 ```
 
 ---
 
 # 🛠 Tech Stack
 
-| Category | Technology |
-|----------|------------|
-| Language | Python 3 |
-| Framework | Streamlit |
-| Agent Framework | LangGraph |
-| LLM Framework | LangChain |
-| LLM | Google Gemini 2.5 Flash |
-| Embeddings | Gemini Embedding-001 |
-| Vector Database | FAISS |
-| Web Search | DuckDuckGo |
-| Weather API | WeatherStack |
-| Document Parsing | PyPDF, Docx2txt |
+| Category               | Technology              |
+| ---------------------- | ----------------------- |
+| Language               | Python 3.13             |
+| UI Framework           | Streamlit               |
+| Agent Framework        | LangGraph               |
+| LLM Framework          | LangChain               |
+| LLM                    | Google Gemini 2.5 Flash |
+| Embeddings             | Gemini Embedding-001    |
+| Vector Database        | FAISS                   |
+| Local Database         | SQLite                  |
+| Web Search             | DuckDuckGo              |
+| Weather API            | WeatherStack            |
+| Flight Search          | SerpApi Google Flights  |
+| Document Parsing       | PyPDF, Docx2txt         |
+| Environment Management | python-dotenv           |
+
 
 ---
 
@@ -158,18 +329,19 @@ Examples:
 
 ```
 AI_Travel_Concierge/
-
 │
-├── app.py                 # Streamlit application
-├── graph.py               # LangGraph workflow
-├── agent.py               # Agent interface
-├── rag.py                 # RAG pipeline
-├── tools.py               # Tool definitions
-├── config.py              # Configuration
+├── app.py                    # Streamlit application
+├── graph.py                  # LangGraph workflow
+├── agent.py                  # Agent interface
+├── rag.py                    # RAG pipeline
+├── tools.py                  # AI agent tools
+├── config.py                 # Configuration and environment variables
+├── database.py               # SQLite database operations
 │
 ├── requirements.txt
 ├── README.md
-├── .env
+├── .env            
+├── .gitignore
 │
 └── Travel Guides/
 ```
@@ -192,7 +364,7 @@ Create virtual environment
 python -m venv .venv
 ```
 
-Activate
+Activate the virtual environment
 
 ### Windows
 
@@ -222,6 +394,8 @@ Create a `.env` file.
 GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
 
 WEATHERSTACK_API_KEY=YOUR_WEATHERSTACK_API_KEY
+
+SERPAPI_API_KEY=YOUR_SERPAPI_API_KEY
 ```
 
 ---
@@ -238,63 +412,65 @@ streamlit run app.py
 
 # 🧠 How It Works
 
-## Step 1
+## Step 1 — Upload a Travel Guide
 
-User uploads a travel guide.
-
-↓
-
-## Step 2
-
-The document is loaded.
+The user uploads a PDF or DOCX travel guide through Streamlit.
 
 ↓
 
-## Step 3
+## Step 2 — Process the Document
 
-The document is split into chunks.
-
-↓
-
-## Step 4
-
-Gemini Embeddings generate vector representations.
+The document is loaded and divided into smaller chunks.
 
 ↓
 
-## Step 5
+## Step 3 — Generate Embeddings
 
-FAISS stores the vectors.
-
-↓
-
-## Step 6
-
-The LangGraph Agent receives the user's question.
+Gemini Embeddings convert the document chunks into vector representations.
 
 ↓
 
-## Step 7
+## Step 4 — Store Vectors
 
-The agent automatically decides which tool to use.
+FAISS stores the generated embeddings for efficient semantic retrieval.
+
+↓
+
+## Step 5 — User Asks a Question
+
+The user's question is sent to the LangGraph agent.
+
+↓
+
+## Step 6 — Agent Selects a Tool
+
+Gemini determines which tool should handle the request.
 
 Possible tools:
 
-- 📄 Document Search
-- 🌐 Web Search
-- 🌦 Weather Tool
+📄 Document Search
+🌐 Web Search
+🌦 Weather Search
+✈️ Flight Search
+🗺️ Itinerary Generation
 
 ↓
 
-## Step 8
+## Step 7 — Tool Executes
 
-The tool returns information.
+The selected tool retrieves or generates the required information.
 
 ↓
 
-## Step 9
+## Step 8 — Gemini Generates the Response
 
-Gemini generates the final response.
+Gemini converts the tool result into a natural-language response.
+
+↓
+
+## Step 9 — Search Is Saved
+
+Relevant search interactions can be stored locally in SQLite for persistence.
 
 ---
 
@@ -346,74 +522,146 @@ Top restaurants in Goa
 Travel news in India
 ```
 
+### ✈️ Flight Search
+```
+Find flights from Delhi to Goa on 2026-08-20.
+```
+
+```
+What flights are available from DEL to GOI?
+```
+
+### 🗺️ Itinerary Generation
+```
+Create a 3-day itinerary for Goa.
+```
+
+```
+Plan a 5-day trip to Kerala.
+```
+
+```
+Make a 2-day itinerary for Jaipur.
+```
+
 ---
 
 # 📦 Week-wise Progress
 
 ## ✅ Week 1–2
 
-- Project Setup
-- Streamlit UI
-- Google Gemini Integration
-- RAG Pipeline
-- FAISS Vector Store
-- PDF Support
-- DOCX Support
-- Semantic Search
-- Travel Guide Chat
-
----
+-Project setup
+-Streamlit UI
+-Google Gemini integration
+-RAG pipeline
+-FAISS vector store
+-PDF support
+-DOCX support
+-Semantic search
+-Travel guide question answering
 
 ## ✅ Week 3–4
 
-- LangGraph Integration
-- AI Agent
-- Tool Calling
-- Document Search Tool
-- DuckDuckGo Search Tool
-- WeatherStack Tool
-- Automatic Tool Routing
-- Tool Testing Scripts
-- Error Handling Improvements
+-LangGraph integration
+-AI agent
+-Tool calling
+-Document search tool
+-DuckDuckGo search tool
+-WeatherStack tool
+-Automatic tool routing
+-Tool testing scripts
+-Error handling improvements
+
+## ✅ Week 5–6
+
+### 💾 SQLite Database
+
+-Added SQLite database support
+-Added persistent search storage
+-Added search retrieval
+-Added database testing
+-Stored questions, responses, and timestamps
+
+### 🗺️ Basic Itinerary Generation
+
+-Added generate_itinerary tool
+-Added Gemini-powered itinerary generation
+-Added day-by-day travel planning
+-Added morning, afternoon, and evening activities
+-Added practical travel tips
+-Integrated itinerary generation with LangGraph tool calling
+-Added itinerary testing
+
+### ✈️ Flight Search
+
+-Added SerpApi Google Flights integration
+-Added departure and arrival airport support
+-Added outbound date support
+-Added airline and flight information
+-Added flight duration and fare information
+-Integrated flight search with LangGraph
+
+### 🔐 Secure API Key Handling
+
+-Added environment-variable based API configuration
+-Added .env support using python-dotenv
+-Added .env.example configuration template
+-Added .env to .gitignore
+-Removed the need for hard-coded API credentials
+-Kept real API keys outside the GitHub repository
 
 ---
 
 # 📈 Future Improvements
+The next development phase will focus heavily on improving the user experience and overall application quality.
 
-- Conversation Memory
-- Persistent FAISS Database
-- Hotel Booking APIs
-- Flight Booking APIs
-- Google Maps Integration
-- Voice Assistant
-- Image-based Travel Search
-- Authentication
-- Deployment on Streamlit Cloud
-- Docker Support
+Planned improvements include:
+
+- 🎨 UI/UX redesign
+- 💬 Improved chat interface
+- 🗂️ Better persistent chat history
+- 🧭 More advanced itinerary personalization
+- 🏨 Hotel search and booking APIs
+- ✈️ Improved flight planning
+- 🗺️ Google Maps integration
+- 💰 Travel budget planning
+- 🌦️ Weather-aware itinerary planning
+- 🔐 Authentication
+- 🎙️ Voice assistant
+- 🖼️ Image-based travel search
+- ☁️ Cloud deployment
+- 🐳 Docker support
 
 ---
 
 # 📷 Screenshots
 
-Add screenshots of:
+Recommended screenshots for the project:
 
-- Home Screen
-- Uploading Document
-- Document Search
-- Web Search
-- Weather Search
+- 🏠 Home screen
+- 📂 Travel guide upload
+- 📄 Document question answering
+- 🌐 Web search
+- 🌦️ Weather search
+- ✈️ Flight search
+- 🗺️ Generated itinerary
+- 💾 SQLite search history
 
 ---
 
 # 🤝 Acknowledgements
+
+This project uses the following technologies and services:
 
 - Google Gemini
 - LangChain
 - LangGraph
 - Streamlit
 - FAISS
+- SQLite
 - DuckDuckGo
 - WeatherStack
+- SerpApi
 
 ---
 
