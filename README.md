@@ -57,13 +57,13 @@ The application uses Google Gemini 2.5 Flash with LangGraph for intelligent tool
 
 Features include:
 
--Gemini-powered conversations
--LangGraph agent workflow
--Automatic tool calling
--Multiple specialized tools
--Natural-language travel requests
--Markdown-formatted responses
--Tool-based reasoning
+- Gemini-powered conversations
+- LangGraph agent workflow
+- Automatic tool calling
+- Multiple specialized tools
+- Natural-language travel requests
+- Markdown-formatted responses
+- Tool-based reasoning
 
 The agent decides which tool should handle a request based on the user's question.
 
@@ -77,11 +77,18 @@ Searches the uploaded travel guide using the FAISS-based RAG pipeline.
 The agent prioritizes the uploaded document whenever the requested information may exist inside the guide.
 
 Examples:
-
-- Compare Goa and Kerala
-- Best time to visit Kerala
-- Beaches in Goa
-- Famous places in Jaipur
+```
+Compare Goa and Kerala
+```
+```
+Best time to visit Kerala
+```
+```
+Beaches in Goa
+```
+```
+Famous places in Jaipur
+```
 
 ---
 
@@ -91,15 +98,15 @@ Uses DuckDuckGo Search to retrieve recent or external information.
 
 Useful for:
 
--Recent travel information
--Current attractions
--Travel news
--Information not available in the uploaded guide
+- Recent travel information
+- Current attractions
+- Travel news
+- Information not available in the uploaded guide
 
 Example:
-
--What are the latest tourist attractions in Jaipur?
-
+```
+What are the latest tourist attractions in Jaipur?
+```
 ---
 
 #### 🌦 Weather Search
@@ -107,15 +114,15 @@ Example:
 Uses the WeatherStack API for current weather information.
 
 Example:
-
--Weather in Goa
-
+```
+Weather in Goa
+```
 Returns information such as:
 
--Temperature
--Weather description
--Humidity
--Wind speed
+- Temperature
+- Weather description
+- Humidity
+- Wind speed
 
 ---
 
@@ -125,19 +132,21 @@ Uses SerpApi Google Flights to search for available flights.
 
 The flight tool supports:
 
--Departure airport
--Arrival airport
--Outbound date
--Airline
--Flight number
--Departure time
--Arrival time
--Flight duration
--Approximate fare
+- Departure airport
+- Arrival airport
+- Outbound date
+- Airline
+- Flight number
+- Departure time
+- Arrival time
+- Flight duration
+- Approximate fare
 
 Example:
 
--Find flights from Delhi to Goa on 2026-08-20.
+```
+- Find flights from Delhi to Goa on 2026-08-20.
+```
 
 The agent uses IATA airport codes when calling the flight search tool.
 
@@ -150,19 +159,25 @@ The project now supports automatic generation of basic day-by-day travel itinera
 The user can request an itinerary using natural language.
 
 Examples:
--Create a 3-day itinerary for Goa.
--Make a 2-day itinerary for Jaipur.
--Plan a 5-day trip to Kerala.
+```
+Create a 3-day itinerary for Goa.
+```
+```
+Make a 2-day itinerary for Jaipur.
+```
+```
+Plan a 5-day trip to Kerala.
+```
 
 The itinerary generator creates:
 
--Daily travel plans
--Morning activities
--Afternoon activities
--Evening activities
--Major attractions
--Travel flow between nearby locations
--Practical tips
+- Daily travel plans
+- Morning activities
+- Afternoon activities
+- Evening activities
+- Major attractions
+- Travel flow between nearby locations
+- Practical tips
 
 The itinerary generator is intentionally kept as a basic planning feature at this stage. More advanced personalization and real-time itinerary optimization can be added in future iterations.
 
@@ -173,9 +188,9 @@ The application now includes a lightweight SQLite database for storing search in
 
 Saved information includes:
 
--User question
--Assistant response
--Timestamp
+- User question
+- Assistant response
+- Timestamp
 
 This provides persistent local storage for searches instead of keeping everything only in Streamlit session state.
 
@@ -219,8 +234,8 @@ Current UI features include:
 - 💭 Chat history during the session
 - 📋 Sidebar controls
 - ⏳ Loading indicators
-📄 Document processing feedback
-🎨 Custom chat message styling
+- 📄 Document processing feedback
+- 🎨 Custom chat message styling
 
 The UI will be further improved and polished during the upcoming development phase.
 ---
@@ -448,11 +463,11 @@ Gemini determines which tool should handle the request.
 
 Possible tools:
 
-📄 Document Search
-🌐 Web Search
-🌦 Weather Search
-✈️ Flight Search
-🗺️ Itinerary Generation
+- 📄 Document Search
+- 🌐 Web Search
+- 🌦 Weather Search
+- ✈️ Flight Search
+- 🗺️ Itinerary Generation
 
 ↓
 
@@ -550,65 +565,65 @@ Make a 2-day itinerary for Jaipur.
 
 ## ✅ Week 1–2
 
--Project setup
--Streamlit UI
--Google Gemini integration
--RAG pipeline
--FAISS vector store
--PDF support
--DOCX support
--Semantic search
--Travel guide question answering
+- Project setup
+- Streamlit UI
+- Google Gemini integration
+- RAG pipeline
+- FAISS vector store
+- PDF support
+- DOCX support
+- Semantic search
+- Travel guide question answering
 
 ## ✅ Week 3–4
 
--LangGraph integration
--AI agent
--Tool calling
--Document search tool
--DuckDuckGo search tool
--WeatherStack tool
--Automatic tool routing
--Tool testing scripts
--Error handling improvements
+- LangGraph integration
+- AI agent
+- Tool calling
+- Document search tool
+- DuckDuckGo search tool
+- WeatherStack tool
+- Automatic tool routing
+- Tool testing scripts
+- Error handling improvements
 
 ## ✅ Week 5–6
 
 ### 💾 SQLite Database
 
--Added SQLite database support
--Added persistent search storage
--Added search retrieval
--Added database testing
--Stored questions, responses, and timestamps
+- Added SQLite database support
+- Added persistent search storage
+- Added search retrieval
+- Added database testing
+- Stored questions, responses, and timestamps
 
 ### 🗺️ Basic Itinerary Generation
 
--Added generate_itinerary tool
--Added Gemini-powered itinerary generation
--Added day-by-day travel planning
--Added morning, afternoon, and evening activities
--Added practical travel tips
--Integrated itinerary generation with LangGraph tool calling
--Added itinerary testing
+- Added generate_itinerary tool
+- Added Gemini-powered itinerary generation
+- Added day-by-day travel planning
+- Added morning, afternoon, and evening activities
+- Added practical travel tips
+- Integrated itinerary generation with LangGraph tool calling
+- Added itinerary testing
 
 ### ✈️ Flight Search
 
--Added SerpApi Google Flights integration
--Added departure and arrival airport support
--Added outbound date support
--Added airline and flight information
--Added flight duration and fare information
--Integrated flight search with LangGraph
+- Added SerpApi Google Flights integration
+- Added departure and arrival airport support
+- Added outbound date support
+- Added airline and flight information
+- Added flight duration and fare information
+- Integrated flight search with LangGraph
 
 ### 🔐 Secure API Key Handling
 
--Added environment-variable based API configuration
--Added .env support using python-dotenv
--Added .env.example configuration template
--Added .env to .gitignore
--Removed the need for hard-coded API credentials
--Kept real API keys outside the GitHub repository
+- Added environment-variable based API configuration
+- Added .env support using python-dotenv
+- Added .env.example configuration template
+- Added .env to .gitignore
+- Removed the need for hard-coded API credentials
+- Kept real API keys outside the GitHub repository
 
 ---
 
